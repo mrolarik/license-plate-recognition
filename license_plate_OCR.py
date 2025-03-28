@@ -35,3 +35,6 @@ if uploaded_file:
     if found_texts:
         st.write("### 📝 Recognized Text:")
         for text, conf in found_texts:
+            st.write(f"- **{text}** ({conf*100:.2f}%)")
+    else:
+        st.warning("No clear license plate text detected.")
