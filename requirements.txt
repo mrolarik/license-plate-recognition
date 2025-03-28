@@ -3,4 +3,5 @@ pillow==11.1.0
 tensorflow==2.19.0
 matplotlib==3.10.1
 opencv-python==4.11.0.86
-easycor==1.7.2
+#easycor==1.7.2
+easycor @ git+https://github.com/JaidedAI/EasyOCR.git
