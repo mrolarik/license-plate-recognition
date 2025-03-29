@@ -25,7 +25,7 @@ sample_choice = None
 sample_label = None
 
 for label, url in sample_images.items():
-    st.sidebar.image(url, caption=label, use_column_width=True)
+    st.sidebar.image(url, caption=label, use_container_width=True)
     if st.sidebar.button(f"ใช้{label}"):
         sample_choice = url
         sample_label = label
