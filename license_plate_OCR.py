@@ -49,7 +49,7 @@ if image:
 
     # ==== Load Font (for larger label numbers) ====
     try:
-        font = ImageFont.truetype("arial.ttf", 24)  # use system font if available
+        font = ImageFont.truetype("arial.ttf", 30)  # use system font if available
     except:
         font = ImageFont.load_default()  # fallback
 
