@@ -16,16 +16,16 @@ reader = load_reader()
 st.sidebar.header("🖼️ ตัวอย่างภาพ")
 
 sample_images = {
-    "ภาพตัวอย่าง 1": "https://i.imgur.com/4n1pUtM.jpg",
-    "ภาพตัวอย่าง 2": "https://i.imgur.com/ivdYuzE.jpg",
-    "ภาพตัวอย่าง 3": "https://i.imgur.com/DG6J1hb.jpg"
+    "ภาพตัวอย่าง 1": "https://iamkohchang.com/wp-content/uploads/2020/07/Basic-Thai-Class.png",
+    "ภาพตัวอย่าง 2": "https://i.ytimg.com/vi/2iwiGLbP9_4/maxresdefault.jpg",
+    "ภาพตัวอย่าง 3": "https://i.pinimg.com/564x/ed/db/1f/eddb1f5e61ac724efa9d6be23b6f8fcd.jpg"
 }
 
 sample_choice = None
 sample_label = None
 
 for label, url in sample_images.items():
-    st.sidebar.image(url, caption=label, use_column_width=True)
+    st.sidebar.image(url, caption=label, use_container_width=True)
     if st.sidebar.button(f"ใช้{label}"):
         sample_choice = url
         sample_label = label
