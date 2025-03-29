@@ -15,7 +15,7 @@ reader = load_reader()
 # ==== Sidebar: Sample Image ====
 st.sidebar.header("🖼️ ตัวอย่างภาพ")
 sample_url = "https://i.ytimg.com/vi/iD0s0EeLVGc/sddefault.jpg"
-st.sidebar.image(sample_url, caption="ภาพตัวอย่าง", use_column_width=True)
+st.sidebar.image(sample_url, caption="ภาพตัวอย่าง", use_container_width=True)
 use_sample = st.sidebar.button("ใช้ภาพตัวอย่างนี้")
 
 # ==== Title and Info ====
