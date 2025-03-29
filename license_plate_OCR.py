@@ -15,8 +15,8 @@ reader = load_reader()
 # ==== Sample Images ====
 sample_images = {
     "ภาพตัวอย่าง 1": "https://metalbyexample.com/wp-content/uploads/figure-65.png",
-    "ภาพตัวอย่าง 2": "https://i.imgur.com/4n1pUtM.jpg",
-    "ภาพตัวอย่าง 3": "https://i.imgur.com/DG6J1hb.jpg"
+    "ภาพตัวอย่าง 2": "https://i.ytimg.com/vi/Ch8YcYvSftw/maxresdefault.jpg",
+    "ภาพตัวอย่าง 3": "https://m.media-amazon.com/images/I/41rLoTHkMbL.png"    
 }
 
 # ==== Input Method Selection ====
@@ -27,7 +27,7 @@ input_method = st.sidebar.radio("วิธีการเลือกภาพ:"
 sample_choice = None
 if input_method == "ภาพตัวอย่าง":
     for label, url in sample_images.items():
-        st.sidebar.image(url, caption=label, use_column_width=True)
+        st.sidebar.image(url, caption=label, use_container_width=True)
         if st.sidebar.button(f"ใช้{label}"):
             sample_choice = url
             st.session_state.selected_sample_label = label
