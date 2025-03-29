@@ -17,8 +17,8 @@ st.sidebar.header("🖼️ ตัวอย่างภาพ")
 
 sample_images = {
     "ภาพตัวอย่าง 1": "https://metalbyexample.com/wp-content/uploads/figure-65.png",
-    "ภาพตัวอย่าง 2": "https://i.imgur.com/4n1pUtM.jpg",
-    "ภาพตัวอย่าง 3": "https://i.imgur.com/DG6J1hb.jpg"
+    "ภาพตัวอย่าง 2": "https://i.ytimg.com/vi/Ch8YcYvSftw/maxresdefault.jpg",
+    "ภาพตัวอย่าง 3": "https://m.media-amazon.com/images/I/41rLoTHkMbL.png"
 }
 
 sample_choice = None
