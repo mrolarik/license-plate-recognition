@@ -12,26 +12,41 @@ def load_reader():
 
 reader = load_reader()
 
-# ==== Sidebar: Sample Image ====
+# ==== Sidebar: Multiple Sample Images ====
 st.sidebar.header("🖼️ ตัวอย่างภาพ")
-sample_url = "https://i.imgur.com/4n1pUtM.jpg"
-st.sidebar.image(sample_url, caption="ภาพตัวอย่าง", use_column_width=True)
-use_sample = st.sidebar.button("ใช้ภาพตัวอย่างนี้")
 
-# ==== Title and Info ====
+sample_images = {
+    "ภาพตัวอย่าง 1": "https://i.imgur.com/4n1pUtM.jpg",
+    "ภาพตัวอย่าง 2": "https://i.imgur.com/ivdYuzE.jpg",
+    "ภาพตัวอย่าง 3": "https://i.imgur.com/DG6J1hb.jpg"
+}
+
+sample_choice = None
+sample_label = None
+
+for label, url in sample_images.items():
+    st.sidebar.image(url, caption=label, use_column_width=True)
+    if st.sidebar.button(f"ใช้{label}"):
+        sample_choice = url
+        sample_label = label
+
+# ==== Main Title and Description ====
 st.title("🚗 Text Recognition (OCR)")
-st.write("อัปโหลดภาพหรือป้อน URL เพื่อดึงข้อความจากภาพ (รองรับภาษาไทยและอังกฤษ)")
+st.write("อัปโหลดภาพ หรือใช้ URL หรือเลือกรูปภาพตัวอย่างเพื่อตรวจจับข้อความ (รองรับภาษาไทยและอังกฤษ)")
 
-# ==== Input Method ====
+# ==== Image Input ====
 image = None
-if use_sample:
-    try:
-        response = requests.get(sample_url)
-        image = Image.open(BytesIO(response.content)).convert("RGB")
-        st.success("✅ โหลดภาพตัวอย่างสำเร็จ")
-    except:
-        st.error("❌ ไม่สามารถโหลดภาพตัวอย่างได้ กรุณาลองอีกครั้ง")
 
+# From Sample
+if sample_choice:
+    try:
+        response = requests.get(sample_choice)
+        image = Image.open(BytesIO(response.content)).convert("RGB")
+        st.success(f"✅ โหลด{sample_label}สำเร็จ")
+    except:
+        st.error("❌ ไม่สามารถโหลดภาพตัวอย่างได้")
+
+# From Upload or URL
 else:
     input_method = st.radio("เลือกรูปแบบการนำเข้ารูปภาพ:", ["📁 อัปโหลดรูปภาพ", "🌐 ป้อน URL รูปภาพ"])
 
@@ -50,7 +65,7 @@ else:
             except:
                 st.error("❌ ไม่สามารถโหลดภาพจาก URL ได้ กรุณาตรวจสอบลิงก์")
 
-# ==== Run OCR if image is ready ====
+# ==== Process and Display OCR ====
 if image:
     st.image(image, caption="📸 ภาพที่นำเข้า", use_container_width=True)
 
@@ -61,28 +76,16 @@ if image:
 
     draw = ImageDraw.Draw(image)
 
-    # ==== Load Font for Index Numbers ====
+    # ==== Load font for box numbering ====
     try:
-        font = ImageFont.truetype("arial.ttf", 24)  # You can replace with any TTF font
+        font = ImageFont.truetype("arial.ttf", 24)  # or any other TTF font
     except:
         font = ImageFont.load_default()
 
     found_texts = []
 
-    # ==== Draw boxes and numbers ====
     for idx, (bbox, text, confidence) in enumerate(results, start=1):
         if confidence > 0.4:
             found_texts.append((idx, text, confidence))
             points = [tuple(point) for point in bbox]
-            draw.line(points + [points[0]], fill="red", width=3)
-            draw.text(points[0], str(idx), fill="yellow", font=font)
-
-    st.image(image, caption="🟥 ตรวจพบข้อความ", use_container_width=True)
-
-    # ==== Show Numbered Output Text ====
-    if found_texts:
-        st.write("### 📝 ข้อความที่ตรวจพบ:")
-        for idx, text, conf in found_texts:
-            st.write(f"{idx}. **{text}** ({conf*100:.2f}%)")
-    else:
-        st.warning("ไม่พบข้อความที่มีความมั่นใจเพียงพอ")
+            draw
