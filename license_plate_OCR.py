@@ -5,19 +5,19 @@ import numpy as np
 import requests
 from io import BytesIO
 
-# Initialize EasyOCR reader (Thai + English)
+# ==== Load OCR Reader (Thai + English) ====
 @st.cache_resource
 def load_reader():
     return easyocr.Reader(['th', 'en'], gpu=False)
 
 reader = load_reader()
 
+# ==== Streamlit UI ====
 st.title("🚗 Text Recognition (OCR)")
-st.write("อัปโหลดหรือป้อน URL ของภาพที่มีข้อความ ระบบจะตรวจจับและอ่านข้อความ (รองรับภาษาไทยและอังกฤษ)")
+st.write("อัปโหลดภาพหรือป้อน URL เพื่อดึงข้อความจากภาพ (รองรับภาษาไทยและอังกฤษ)")
 
-# ======== Input method: Upload or URL ========
+# ==== Input Method ====
 input_method = st.radio("เลือกรูปแบบการนำเข้ารูปภาพ:", ["📁 อัปโหลดรูปภาพ", "🌐 ป้อน URL รูปภาพ"])
-
 image = None
 
 if input_method == "📁 อัปโหลดรูปภาพ":
@@ -35,7 +35,7 @@ elif input_method == "🌐 ป้อน URL รูปภาพ":
         except:
             st.error("❌ ไม่สามารถโหลดภาพจาก URL ได้ กรุณาตรวจสอบลิงก์")
 
-# ======== If an image is loaded ========
+# ==== If image is ready ====
 if image:
     st.image(image, caption="📸 ภาพที่นำเข้า", use_container_width=True)
 
@@ -47,17 +47,20 @@ if image:
     draw = ImageDraw.Draw(image)
     found_texts = []
 
-    for bbox, text, confidence in results:
+    # Draw bounding boxes with numbers
+    for idx, (bbox, text, confidence) in enumerate(results, start=1):
         if confidence > 0.4:
-            found_texts.append((text, confidence))
+            found_texts.append((idx, text, confidence))
             points = [tuple(point) for point in bbox]
             draw.line(points + [points[0]], fill="red", width=3)
+            draw.text(points[0], str(idx), fill="yellow")
 
     st.image(image, caption="🟥 ตรวจพบข้อความ", use_container_width=True)
 
+    # Numbered output list
     if found_texts:
         st.write("### 📝 ข้อความที่ตรวจพบ:")
-        for text, conf in found_texts:
-            st.write(f"- **{text}** ({conf*100:.2f}%)")
+        for idx, text, conf in found_texts:
+            st.write(f"{idx}. **{text}** ({conf*100:.2f}%)")
     else:
         st.warning("ไม่พบข้อความที่มีความมั่นใจเพียงพอ")
