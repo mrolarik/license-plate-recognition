@@ -1,9 +1,10 @@
 import streamlit as st
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import easyocr
 import numpy as np
 import requests
 from io import BytesIO
+import os
 
 # ==== Load OCR Reader (Thai + English) ====
 @st.cache_resource
@@ -45,6 +46,13 @@ if image:
         results = reader.readtext(img_array)
 
     draw = ImageDraw.Draw(image)
+
+    # ==== Load Font (for larger label numbers) ====
+    try:
+        font = ImageFont.truetype("arial.ttf", 24)  # use system font if available
+    except:
+        font = ImageFont.load_default()  # fallback
+
     found_texts = []
 
     # Draw bounding boxes with numbers
@@ -53,7 +61,7 @@ if image:
             found_texts.append((idx, text, confidence))
             points = [tuple(point) for point in bbox]
             draw.line(points + [points[0]], fill="red", width=3)
-            draw.text(points[0], str(idx), fill="yellow")
+            draw.text(points[0], str(idx), fill="yellow", font=font)
 
     st.image(image, caption="🟥 ตรวจพบข้อความ", use_container_width=True)
 
