@@ -12,26 +12,41 @@ def load_reader():
 
 reader = load_reader()
 
-# ==== Sidebar: Sample Image ====
+# ==== Sidebar: Multiple Sample Images ====
 st.sidebar.header("🖼️ ตัวอย่างภาพ")
-sample_url = "https://metalbyexample.com/wp-content/uploads/figure-65.png"
-st.sidebar.image(sample_url, caption="ภาพตัวอย่าง", use_container_width=True)
-use_sample = st.sidebar.button("ใช้ภาพตัวอย่างนี้")
+
+sample_images = {
+    "ภาพตัวอย่าง 1": "https://metalbyexample.com/wp-content/uploads/figure-65.png",
+    "ภาพตัวอย่าง 2": "https://i.imgur.com/4n1pUtM.jpg",
+    "ภาพตัวอย่าง 3": "https://i.imgur.com/DG6J1hb.jpg"
+}
+
+sample_choice = None
+sample_label = None
+
+for label, url in sample_images.items():
+    st.sidebar.image(url, caption=label, use_column_width=True)
+    if st.sidebar.button(f"ใช้{label}"):
+        sample_choice = url
+        sample_label = label
 
 # ==== Title and Info ====
 st.title("🚗 Text Recognition (OCR)")
-st.write("อัปโหลดภาพหรือป้อน URL เพื่อดึงข้อความจากภาพ (รองรับภาษาไทยและอังกฤษ)")
+st.write("อัปโหลดภาพหรือป้อน URL หรือเลือกรูปภาพตัวอย่างเพื่อตรวจจับข้อความ (รองรับภาษาไทยและอังกฤษ)")
 
-# ==== Input Method ====
+# ==== Image Input ====
 image = None
-if use_sample:
+
+# ==== From Sample ====
+if sample_choice:
     try:
-        response = requests.get(sample_url)
+        response = requests.get(sample_choice)
         image = Image.open(BytesIO(response.content)).convert("RGB")
-        st.success("✅ โหลดภาพตัวอย่างสำเร็จ")
+        st.success(f"✅ โหลด{sample_label}สำเร็จ")
     except:
         st.error("❌ ไม่สามารถโหลดภาพตัวอย่างได้ กรุณาลองอีกครั้ง")
 
+# ==== From Upload or URL ====
 else:
     input_method = st.radio("เลือกรูปแบบการนำเข้ารูปภาพ:", ["📁 อัปโหลดรูปภาพ", "🌐 ป้อน URL รูปภาพ"])
 
@@ -63,7 +78,7 @@ if image:
 
     # ==== Load Font for Index Numbers ====
     try:
-        font = ImageFont.truetype("arial.ttf", 24)  # You can replace with any TTF font
+        font = ImageFont.truetype("arial.ttf", 24)
     except:
         font = ImageFont.load_default()
 
